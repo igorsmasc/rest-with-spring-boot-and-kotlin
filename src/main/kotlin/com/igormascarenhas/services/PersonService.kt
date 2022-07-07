@@ -1,8 +1,10 @@
 package com.igormascarenhas.services
 
 import com.igormascarenhas.data.vo.v1.PersonVO
+import com.igormascarenhas.data.vo.v2.PersonVO as PersonVOV2
 import com.igormascarenhas.exceptions.ResourceNotFoundException
 import com.igormascarenhas.mapper.DozerMapper
+import com.igormascarenhas.mapper.custom.PersonMapper
 import com.igormascarenhas.models.Person
 import com.igormascarenhas.repositories.PersonRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,6 +16,9 @@ class PersonService {
 
     @Autowired
     private lateinit var repository: PersonRepository
+
+    @Autowired
+    private lateinit var personMapper: PersonMapper
 
     private val logger = Logger.getLogger(PersonService::class.java.name)
 
@@ -39,6 +44,14 @@ class PersonService {
         var entity: Person = DozerMapper.parseObject(person, Person::class.java)
 
         return DozerMapper.parseObject(repository.save(entity), PersonVO::class.java)
+    }
+
+    fun createV2(person: PersonVOV2): PersonVOV2 {
+        logger.info("Creating one person with name ${person.firstName}.")
+
+        var entity: Person = personMapper.mapVOToEntity(person)
+
+        return personMapper.mapEntityToVO(repository.save(entity))
     }
 
     fun delete(id: Long) {
