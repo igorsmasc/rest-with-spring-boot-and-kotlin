@@ -1,6 +1,6 @@
 package com.igormascarenhas.controllers
 
-import com.igormascarenhas.models.Person
+import com.igormascarenhas.data.vo.v1.PersonVO
 import com.igormascarenhas.services.PersonService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -22,12 +21,12 @@ class PersonController {
     private lateinit var service: PersonService
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun findAll(): List<Person> {
+    fun findAll(): List<PersonVO> {
         return service.findAll()
     }
 
     @GetMapping(value = ["/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun findByID(@PathVariable(value = "id") id: Long): Person {
+    fun findByID(@PathVariable(value = "id") id: Long): PersonVO {
         return service.findById(id)
     }
 
@@ -35,7 +34,8 @@ class PersonController {
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun create(@RequestBody person: Person): Person {
+
+    fun create(@RequestBody person: PersonVO): PersonVO {
         return service.create(person)
     }
 
@@ -43,7 +43,7 @@ class PersonController {
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun update(@RequestBody person: Person): Person {
+    fun update(@RequestBody person: PersonVO): PersonVO {
         return service.update(person)
     }
 
